@@ -81,10 +81,6 @@
   </head>
 
   <body>
-    <div>
-      <div class="notpad" id="sim"></div>
-    </div>
-
     <div class="flex justify-center items-center" id="controls">
       <div x-data="{ open: true }">
         <div x-show="open" class="fixed inset-0 z-50 overflow-hidden">
@@ -331,6 +327,11 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <div class="notpad" id="sim"></div>
+    </div>
+    
     <!-- Help and info -->
     <div id="debug"></div>
 
