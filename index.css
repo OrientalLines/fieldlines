@@ -5,10 +5,14 @@ div#sim {
     top: 0px;
     cursor: default;
     overflow: hidden;
-    width: 100%;
+    width: 5%;
     height: 100vh;
     /*  margin-bottom: 100px;*/
-    z-index: -1 !important;
+    z-index: 0 !important;
+  }
+  canvas {
+    z-index: -1;
+    position: relative;
   }
 
   div#controls {
