@@ -194,13 +194,25 @@ function Applet(element, options) {
     element.addEventListener("touchstart", (ev) => self.AddCharge(ev));
   });
 
+  // document
+  //   .getElementById("ctl-do-eqipotential")
+  //   .addEventListener("onchange", () => self.Draw());
+  // document
+  //   .getElementById("ctl-do-eqipotential")
+  //   .addEventListener(".detectThisChange", () => self.Draw());
+  // document
+  //   .getElementById("ctl-do-eqipotential")
+  //   .addEventListener("click", () => self.Draw());
   document
     .getElementById("ctl-do-eqipotential")
     .addEventListener("onchange", () => self.Draw());
   document
     .getElementById("ctl-do-eqipotential")
-    .addEventListener(".detectThisChange", () => self.Draw());
-  
+    .addEventListener("change", () => self.Draw());
+  document
+    .getElementById("ctl-do-eqipotential")
+    .addEventListener("touchstart", () => self.Draw());
+
   document
     .getElementById("ctl-zoom-in")
     .addEventListener("click", () => self.DoZoom(1));
