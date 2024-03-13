@@ -197,10 +197,22 @@ function Applet(element, options) {
   document
     .getElementById("ctl-do-eqipotential")
     .addEventListener("click", () => self.Draw());
+  document
+    .getElementById("ctl-do-eqipotential")
+    .addEventListener("tap", () => self.Draw());
+  document
+    .getElementById("ctl-do-eqipotential")
+    .addEventListener("touchstart", () => self.Draw());
 
   document
     .getElementById("ctl-zoom-in")
     .addEventListener("click", () => self.DoZoom(1));
+  document
+    .getElementById("ctl-zoom-in")
+    .addEventListener("tap", () => self.DoZoom(1));
+  document
+    .getElementById("ctl-zoom-in")
+    .addEventListener("touchstart", () => self.DoZoom(1));
 
   // This seems to be a mistake in the original code, as `.on` is not a valid method without an event type.
   // Assuming it was intended to be another click event listener for "#ctl-zoom-in", which seems redundant.
@@ -209,6 +221,12 @@ function Applet(element, options) {
   document
     .getElementById("ctl-zoom-out")
     .addEventListener("click", () => self.DoZoom(-1));
+  document
+    .getElementById("ctl-zoom-out")
+    .addEventListener("tap", () => self.DoZoom(-1));
+  document
+    .getElementById("ctl-zoom-out")
+    .addEventListener("touchstart", () => self.DoZoom(-1));
 
   document.getElementById("estMode").addEventListener("change", function () {
     self.estMode = this.value;

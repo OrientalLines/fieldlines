@@ -53,16 +53,6 @@ div#controls .addcharge {
   touch-action: all;
 }
 
-div#totalenergy {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin: 10px;
-  z-index: 2;
-  pointer-events: none;
-  color: orange;
-}
-
 div#debug {
   display: none;
   position: fixed;
