@@ -718,7 +718,6 @@ Applet.prototype.Draw = function () {
   this.ctx.save();
 
   this.do_equipotential = $("#ctl-do-eqipotential").is(":checked");
-
   this.canvas_translate = {
     x: this.canvas.width / 2,
     y: this.canvas.height / 2,
@@ -1001,34 +1000,4 @@ Applet.prototype.AddChargeRandom = function (ev) {
   });
 
   this.Draw();
-};
-
-Applet.prototype.PrintHQ = function () {
-  console.log("Applet::PrintHQ");
-  // First, save our current state.
-  var saveCanvas = this.canvas;
-  var saveCtx = this.ctx;
-  var saveWidth = this.width;
-  var saveHeight = this.height;
-
-  // Second, create an offscreen drawing context.
-  var canvas = document.createElement("canvas");
-  this.canvas = canvas;
-  canvas.width = saveWidth * gPrintScale;
-  canvas.height = saveHeight * gPrintScale;
-  // this.width  = saveWidth * gPrintScale;
-  // this.height = saveHeight * gPrintScale;
-  this.ctx = this.canvas.getContext("2d");
-
-  // Now do the actual draw
-  // this.Resize();
-  this.ctx.scale(gPrintScale, gPrintScale);
-  this.Draw();
-
-  // Save the print result
-  gPrintBuffer = this.canvas.toDataURL("image/png");
-
-  // Restore defaults.
-  this.canvas = saveCanvas;
-  this.ctx = saveCtx;
 };
