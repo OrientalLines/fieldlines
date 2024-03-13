@@ -1,10 +1,8 @@
 var TWO_PI = Math.PI * 2;
 
 var source_lines_per_unit_charge = 10;
-var k = 10; // 1/4 pi epsilon naught
+var k = 10;
 
-// configuration:
-// var step = 0.06;
 var step = 0.06;
 var start_step = 0.001;
 var max_steps = 2000;
@@ -17,37 +15,59 @@ var potential_multiple = 3;
 
 var hide_charge_values = false;
 
-// For profiling
-// console.log=()=>{};
-// console.warn=()=>{};
-
-// A list of random things values from zero to twopi, as trial seeds for directions
 var myRandom = [];
 for (var r = 0; r < 7; r++) myRandom.push((Math.PI * 2 * r) / 7);
 for (var r = 1; r < 15; r++) myRandom.push((Math.PI * 2 * r) / 15);
 for (var r = 2; r < 1000; r++) myRandom.push(Math.random() * Math.PI * 2);
 
-$(function () {
-  applet = new Applet($("div#sim"));
-  $("#lines_per_unit_charge").html(source_lines_per_unit_charge);
-  $("#lines_slider").slider({
-    value: source_lines_per_unit_charge,
-    min: 3,
-    max: 30,
-    step: 1,
-    slide: function (event, ui) {
-      source_lines_per_unit_charge = ui.value;
-      $("#lines_per_unit_charge").html(source_lines_per_unit_charge);
-      applet.Draw();
-    },
+// $(function () {
+//   applet = new Applet($("div#sim"));
+//   $("#lines_per_unit_charge").html(source_lines_per_unit_charge);
+//   $("#lines_slider").slider({
+//     value: source_lines_per_unit_charge,
+//     min: 3,
+//     max: 30,
+//     step: 1,
+//     slide: function (event, ui) {
+//       source_lines_per_unit_charge = ui.value;
+//       $("#lines_per_unit_charge").html(source_lines_per_unit_charge);
+//       applet.Draw();
+//     },
+//   });
+
+//   $("#downloadlink").bind("click", function (ev) {
+//     var dt = applet.canvas.toDataURL("image/png");
+//     this.href = dt;
+
+//     // return DoPrint($('#everything'),true);
+//   });
+// });
+document.addEventListener("DOMContentLoaded", () => {
+  let applet = new Applet(document.querySelector("div#sim"));
+  document.querySelector("#lines_per_unit_charge").innerHTML =
+    source_lines_per_unit_charge;
+
+  // Setup the slider
+  const slider = document.querySelector("#lines_slider");
+  slider.setAttribute("type", "range");
+  slider.setAttribute("min", "3");
+  slider.setAttribute("max", "30");
+  slider.setAttribute("step", "1");
+  slider.value = source_lines_per_unit_charge;
+
+  slider.addEventListener("input", function () {
+    source_lines_per_unit_charge = this.value;
+    document.querySelector("#lines_per_unit_charge").innerHTML =
+      source_lines_per_unit_charge;
+    applet.Draw();
   });
 
-  $("#downloadlink").bind("click", function (ev) {
-    var dt = applet.canvas.toDataURL("image/png");
-    this.href = dt;
-
-    // return DoPrint($('#everything'),true);
-  });
+  document
+    .querySelector("#downloadlink")
+    .addEventListener("click", function () {
+      const dt = applet.canvas.toDataURL("image/png");
+      this.href = dt;
+    });
 });
 
 function Applet(element, options) {
@@ -73,13 +93,6 @@ function Applet(element, options) {
   // Merge in options from element
   var element_settings = $(element).attr("settings");
   var element_settings_obj = {};
-  // if(element_settings) {
-  //   eval( "var element_settings_obj = { " + element_settings + '};');; // override from 'settings' attribute of html object.
-  //   console.log(element_settings, element_settings_obj);
-  //   $.extend(true,this,element_settings_obj); // Change default settings by provided overrides.
-  //
-  // }
-  // Look for an existing canvas, and build one if it's not there.
   if ($("canvas", this.element).length < 1) {
     this.canvas = document.createElement("canvas");
     this.element.appendChild(this.canvas);
@@ -155,54 +168,100 @@ function Applet(element, options) {
   this.FindFieldLines();
   this.Draw();
 
-  var self = this;
-  $(window).bind("resize", function (ev) {
-    return self.Resize(ev);
+  // var self = this;
+  // $(window).bind("resize", function (ev) {
+  //   return self.Resize(ev);
+  // });
+
+  // $(window).bind("mousemove", function (ev) {
+  //   return self.DoMouse(ev);
+  // });
+  // $(this.element).bind("mousedown", function (ev) {
+  //   return self.DoMouse(ev);
+  // });
+  // $(window).bind("mouseup", function (ev) {
+  //   return self.DoMouse(ev);
+  // });
+  // $(this.element).bind("mouseout", function (ev) {
+  //   return self.DoMouse(ev);
+  // });
+  // $(".addcharge").bind("mousedown", function (ev) {
+  //   return self.AddCharge(ev);
+  // });
+
+  // $(this.element).bind("touchstart", function (ev) {
+  //   return self.DoMouse(ev);
+  // });
+  // $(window).bind("touchmove", function (ev) {
+  //   return self.DoMouse(ev);
+  // });
+  // $(window).bind("touchend", function (ev) {
+  //   return self.DoMouse(ev);
+  // });
+  // $(".addcharge").bind("touchstart", function (ev) {
+  //   return self.AddCharge(ev);
+  // });
+
+  // $("#ctl-do-eqipotential").click(function () {
+  //   self.Draw();
+  // });
+  // $("#ctl-zoom-in").click(function () {
+  //   self.DoZoom(1);
+  // });
+  // $("#ctl-zoom-in").on(function () {
+  //   self.DoZoom(1);
+  // });
+  // $("#ctl-zoom-out").click(function () {
+  //   self.DoZoom(-1);
+  // });
+  // $("#estMode").on("change", function () {
+  //   self.estMode = $(this).val();
+  //   self.Draw();
+  // });
+  const self = this;
+
+  window.addEventListener("resize", (ev) => self.Resize(ev));
+
+  window.addEventListener("mousemove", (ev) => self.DoMouse(ev));
+
+  this.element.addEventListener("mousedown", (ev) => self.DoMouse(ev));
+
+  window.addEventListener("mouseup", (ev) => self.DoMouse(ev));
+
+  this.element.addEventListener("mouseout", (ev) => self.DoMouse(ev));
+
+  document.querySelectorAll(".addcharge").forEach((element) => {
+    element.addEventListener("mousedown", (ev) => self.AddCharge(ev));
   });
 
-  $(window).bind("mousemove", function (ev) {
-    return self.DoMouse(ev);
-  });
-  $(this.element).bind("mousedown", function (ev) {
-    return self.DoMouse(ev);
-  });
-  $(window).bind("mouseup", function (ev) {
-    return self.DoMouse(ev);
-  });
-  $(this.element).bind("mouseout", function (ev) {
-    return self.DoMouse(ev);
-  });
-  $(".addcharge").bind("mousedown", function (ev) {
-    return self.AddCharge(ev);
+  this.element.addEventListener("touchstart", (ev) => self.DoMouse(ev));
+
+  window.addEventListener("touchmove", (ev) => self.DoMouse(ev));
+
+  window.addEventListener("touchend", (ev) => self.DoMouse(ev));
+
+  document.querySelectorAll(".addcharge").forEach((element) => {
+    element.addEventListener("touchstart", (ev) => self.AddCharge(ev));
   });
 
-  $(this.element).bind("touchstart", function (ev) {
-    return self.DoMouse(ev);
-  });
-  $(window).bind("touchmove", function (ev) {
-    return self.DoMouse(ev);
-  });
-  $(window).bind("touchend", function (ev) {
-    return self.DoMouse(ev);
-  });
-  $(".addcharge").bind("touchstart", function (ev) {
-    return self.AddCharge(ev);
-  });
+  document
+    .getElementById("ctl-do-eqipotential")
+    .addEventListener("click", () => self.Draw());
 
-  $("#ctl-do-eqipotential").click(function () {
-    self.Draw();
-  });
-  $("#ctl-zoom-in").click(function () {
-    self.DoZoom(1);
-  });
-  $("#ctl-zoom-in").on(function () {
-    self.DoZoom(1);
-  });
-  $("#ctl-zoom-out").click(function () {
-    self.DoZoom(-1);
-  });
-  $("#estMode").on("change", function () {
-    self.estMode = $(this).val();
+  document
+    .getElementById("ctl-zoom-in")
+    .addEventListener("click", () => self.DoZoom(1));
+
+  // This seems to be a mistake in the original code, as `.on` is not a valid method without an event type.
+  // Assuming it was intended to be another click event listener for "#ctl-zoom-in", which seems redundant.
+  // So, it's omitted in the rewrite. If it was meant for a different event, add accordingly with the correct event type.
+
+  document
+    .getElementById("ctl-zoom-out")
+    .addEventListener("click", () => self.DoZoom(-1));
+
+  document.getElementById("estMode").addEventListener("change", function () {
+    self.estMode = this.value;
     self.Draw();
   });
 }
@@ -291,9 +350,6 @@ function SpansIntegerMultiple(a, b, r) {
   return Math.max(da, db);
 }
 function PointTripletOrientation(p, q, r) {
-  // From http://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-  // See 10th slides from following link for derivation of the formula
-  // http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf
   var val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
 
   if (val == 0) return 0; // colinear
@@ -319,33 +375,13 @@ function LineSegmentsIntersect(
   p2,
   q2 // second line segment points
 ) {
-  // From http://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-
-  // Find the four orientations needed for general and
-  // special cases
   var o1 = PointTripletOrientation(p1, q1, p2);
   var o2 = PointTripletOrientation(p1, q1, q2);
   var o3 = PointTripletOrientation(p1, p2, q2);
   var o4 = PointTripletOrientation(q1, p2, q2);
 
   var d2 = (q2.x - p1.x) * (q2.x - p1.x) + (q2.y - p1.y) * (q2.y - p1.y);
-  // console.log("Check for intersection",o1,o2,o3,o4,Math.sqrt(d2),p1,q1,p2,q2);
-  // General case
   if (o1 != o2 && o3 != o4) return true;
-
-  // Not important to us; tested segments should always be nearly perpendicular
-  // Special Cases: check for colinearity.
-  // p1, q1 and p2 are colinear and p2 lies on segment p1q1
-  // if (o1 == 0 && PointOnSegment(p1, p2, q1)) return true;
-  //
-  // // p1, q1 and p2 are colinear and q2 lies on segment p1q1
-  // if (o2 == 0 && PointOnSegment(p1, q2, q1)) return true;
-  //
-  // // p2, q2 and p1 are colinear and p1 lies on segment p2q2
-  // if (o3 == 0 && PointOnSegment(p2, p1, q2)) return true;
-  //
-  //  // p2, q2 and q1 are colinear and q1 lies on segment p2q2
-  // if (o4 == 0 && PointOnSegment(p2, q1, q2)) return true;
 
   return false; // Doesn't fall in any of the above cases
 }
@@ -413,72 +449,6 @@ Applet.prototype.SeedNodes = function (charge, startangle) {
       (startangle + (TWO_PI * j) / charge.n_nodes) % TWO_PI
     );
   }
-
-  // // Algorithm 2: Space 'needed' nodes around accoring to the
-  // // LOCAL field, as adjusted by other local charges!
-  // var nGrid = 72;
-  // var biggestField = 0;
-  // var biggestFieldJ = 0;
-  // var totField = 0;
-  // var grid = [];
-  // for(var j=0;j<nGrid;j++) {
-  //   var theta = 2*Math.PI*j/nGrid;
-  //   var x = charge.x+charge.r*Math.cos(theta);
-  //   var y = charge.y+charge.r*Math.sin(theta);
-  //   var E = this.Field(x,y);
-  //   // console.log(x,y,E,charge);
-  //   if(Math.abs(E.E)>biggestField) { biggestField = Math.abs(E.E); biggestFieldJ=j;}
-  //   totField += Math.abs(E.E);
-  //   grid.push(E.E);
-  // }
-  // // Now, evenly space them around in integrated field units.
-  // var spacing = totField/charge.n_nodes;
-  // charge.nodesNeeded.push(2*Math.PI*biggestFieldJ/nGrid);
-  //
-  // var sum = 0;
-  // for(var j=1;j<nGrid;j++) {
-  //   var jj = (j+biggestFieldJ)%nGrid;
-  //   sum += grid[jj];
-  //   if(sum>spacing) {charge.nodesNeeded.push(2*Math.PI*jj/nGrid); sum -= spacing;}
-  // }
-  // var spacings = [];
-  // for(var j=1;j<charge.nodesNeeded.length;j++) {
-  //   spacings.push((charge.nodesNeeded[j]-charge.nodesNeeded[j-1])/2/Math.PI);
-  // }
-  // // console.log('nodes',charge.nodesNeeded);
-  // // console.log('spacings',spacings);
-  // if(charge.nodesNeeded.length != charge.n_nodes) console.log("Got wrong number of needed points. Wanted ",charge.n_nodes," got ",charge.nodesNeeded.length);
-
-  // Algorithm 3: track from the very center, using epsilon push away from charge center.
-  // for(var j = 0; j<charge.n_nodes; j++) {
-  //   var theta = 2*j/charge.n_nodes*Math.PI;
-  //   var dir = 1;
-  //   if(charge.q<0) dir = -1;
-  //   var x = charge.x + 0.01*Math.cos(theta);
-  //   var y = charge.y + 0.01*Math.sin(theta);
-  //   var deltax = 0;
-  //   var deltay = 0;
-  //   var d2 = 0;
-  //   var nstart = 0;
-  //   do {
-  //     var E = this.Field(x,y);
-  //     var dx = E.gx * step/10;
-  //     var dy = E.gy * step/10;
-  //     x += dx*dir;
-  //     y += dy*dir;
-  //     deltax = x-charge.x;
-  //     deltay = y-charge.y;
-  //     d2 = deltax*deltax + deltay*deltay;
-  //     nstart++;
-  //   } while ( d2 < charge.r*charge.r );
-  //
-  //   var angle = Math.atan2(deltay,deltax);
-  //
-  //   charge.nodesNeeded.push(angle);
-  //   console.log("need node:",deltay,deltax,angle,nstart);
-  //  }
-
-  // charge.nodesRequested = charge.nodesNeeded.slice(0);
 };
 
 Applet.prototype.DoCollision = function (collide, x, y) {
@@ -533,7 +503,7 @@ Applet.prototype.TraceFieldLine = function (fieldline) {
     } else {
       // if(this.estMode==4)
       // version 2: Runga-kutta 4th order.
-      h = h * 2; // RK savings mean larger step sizes.
+      h = h * 0.8; // RK savings mean larger step sizes.
       var E2 = this.Field(x + (E.gx * h) / 2, y + (E.gy * h) / 2);
       var E3 = this.Field(x + (E2.gx * h) / 2, y + (E2.gy * h) / 2);
       var E4 = this.Field(x + E3.gx * h, y + E3.gy * h);
@@ -545,14 +515,8 @@ Applet.prototype.TraceFieldLine = function (fieldline) {
       var theta = ((Math.atan2(dy, dx) % (2 * Math.PI)) * 180) / Math.PI; // polar angle direction of RK
       var theta2 =
         ((Math.atan2(E.gy * h, E.gx * h) % (2 * Math.PI)) * 180) / Math.PI; // ditto euler
-      // console.error(theta-theta2);
-      // note that this may not be exactly length h, but who cares?
     }
-    // Fixme adapative euler!
 
-    // Parasitic calculation. Find line segments that cross equipotential lines.
-    // FIXME: I could do this seperately by simply following a line that is perp to E (clockwise). Doesn't work in 3d.
-    // if(this.do_equipotential)
     if (!fieldline.startCharge || dist > fieldline.startCharge.r) {
       var span = SpansIntegerMultiple(lastE.U, E.U, potential_multiple);
       if (span != null) {
@@ -706,31 +670,6 @@ Applet.prototype.FindFieldLines = function () {
   }
 
   if (this.do_equipotential) {
-    // Find equipotential lines.
-    // Trace around all the equpotenial nodes we've found.
-
-    ///
-    /// Thoughts for next revision
-    ///
-    /// Time is taken looking for intersections, and lines failing to close.
-    /// A line starts, misses some nodes (which spawns more line traces) OR it fails to close and loops.
-    ///
-    /// 1) Find unique lines.
-    ///   Find just one line running beteween each charge (1-2, 2-3, 1-3 etc)  Locate equipotential nodes.
-    ///   Include a line from charge to 'outside' if there is one.
-    ///  That still has redundancies, but it's a more limited set of nodes to check.
-
-    /// 2) When tracing, keep track of angle between line segment and every charge point
-    ///    theta_tot += delta_theta,  where delta_theta is the angle subtended by a step relative to that charge.
-    ///    If a line reaches theta_tot ~= 2pi for one or more charges, and ~2*n*pifor the others, we've completed a loop.
-    ///    Alternatively, just check distance to the original point is small (and is less than some arbitrary max)
-
-    ///    This is faster and will stop over-looping
-
-    /// 3) Make sure we're > radius to each other charge
-
-    /// 4) Try adaptive step-size, with RK or otherwise, so that step-size is adjusted on every go.
-
     console.log("looking at potentialnodes: ", this.potentialnodes.length);
     this.potentialnodes.sort(function (a, b) {
       return a.U - b.U;
@@ -747,27 +686,19 @@ Applet.prototype.FindFieldLines = function () {
 
       var xstart = E.x;
       var ystart = E.y;
-      // var fU = (pnode.U - pnode.E1.U)/(pnode.E2.U-pnode.E1.U);
-      // if(pnode.E2.U < pnode.E1.U) fU = -fU;
-      // var startx = pnode.x1 + fU*(pnode.x2-pnode.x1);
-      // var starty = pnode.y1 + fU*(pnode.y2-pnode.y1);
-      // var startE = this.Field(startx,starty);
-      // Start tracing this equpotential back and forth.
       for (var dir = -1; dir < 3; dir += 2) {
         var line = { U: Utarget, points: [{ x: E.x, y: E.y }] };
         var done = false;
-        // console.log("start line at",startE.U,pnode.U,pnode);
+
         var np = 0;
         while (!done) {
           np++;
-          // console.log(point);
-          // version 1: Euler.
           var newx = 0,
             newy = 0;
           if (this.estMode == 1) {
             var h = step_equi * dir;
-            newx = E.x + E.gy * h; // Not a typo. .
-            newy = E.y - E.gx * h; // We're going perpendicular to the field!
+            newx = E.x + E.gy * h;
+            newy = E.y - E.gx * h;
           } else {
             // if(this.estMode==4)
             // version 2: Runga-kutta 4th order.
@@ -779,10 +710,6 @@ Applet.prototype.FindFieldLines = function () {
             newy = E.y - ((E.gx + E2.gx * 2 + E3.gx * 2 + E4.gx) * h) / 6;
           }
           var next_point = this.Field(newx, newy);
-          // RK is good enough we don't need to refine!
-          // var next_point = this.FindPositionOfU(next_point,Utarget,Utolerance); // refine
-
-          // Check for intersection with other potentialnodes. Delete them as we go.
           for (var i = 0; i < this.potentialnodes.length; i++) {
             var othernode = this.potentialnodes[i];
             if (othernode.U == Utarget) {
@@ -795,8 +722,6 @@ Applet.prototype.FindFieldLines = function () {
               }
             } else break; // if list is sorted, should U should match.
           }
-          // var d2 = (next_point.x - xstart)*(next_point.x - xstart)+(next_point.y - ystart)*(next_point.y - ystart);
-          // console.log("distance from start: ",Math.sqrt(d2));
           if (
             np > 2 &&
             LineSegmentsIntersect(E, next_point, pnode.E1, pnode.E2)
@@ -820,69 +745,6 @@ Applet.prototype.FindFieldLines = function () {
   }
 };
 
-// function AdaptiveRKSolver()
-// {
-//   //See https://people.cs.clemson.edu/~dhouse/courses/817/papers/adaptive-h-c16-2.pdf
-//   const a2=0.2,a3=0.3,a4=0.6,a5=1.0,a6=0.875,b21=0.2,
-//     b31=3.0/40.0,b32=9.0/40.0,b41=0.3,b42 = -0.9,b43=1.2,
-//     b51 = -11.0/54.0, b52=2.5,b53 = -70.0/27.0,b54=35.0/27.0,
-//     b61=1631.0/55296.0,b62=175.0/512.0,b63=575.0/13824.0,
-//     b64=44275.0/110592.0,b65=253.0/4096.0,c1=37.0/378.0,
-//     c3=250.0/621.0,c4=125.0/594.0,c6=512.0/1771.0,
-//     dc5 = -277.00/14336.0;
-//   const dc1=c1-2825.0/27648.0,dc3=c3-18575.0/48384.0,
-//     dc4=c4-13525.0/55296.0,dc6=c6-0.25;
-
-//   // fn is function of the form
-//   // fn(x,y) => { x:x, y:y, dx: dxdt, dy: dydt}
-//   function step(p1,h,fn)
-//   {
-//     // first step
-//     var xtemp = p1.x + b21*h * p1.dxdt;
-//     var ytemp = p1.y + b21*h * p1.dydt;
-
-//     // Second step
-//     var p2 = fn(xtemp,ytemp);
-//     xtemp = p1.x + h*(b31*p1.dx+b32*p2.dx)
-//     ytemp = p1.y + h*(b31*p1.dy+b32*p2.dy)
-
-//     // Third step
-//     var p3 = fn(xtemp,ytemp);
-//     xtemp = p1.x+h*(b41*p1.dx+b42*p2.dx+b43*p3.dx);
-//     ytemp = p1.y+h*(b41*p1.dy+b42*p2.dy+b43*p3.dy);
-
-//     // Third step
-//     var p3 = fn(xtemp,ytemp);
-//     xtemp = p1.x+h*(b41*p1.dx+b42*p2.dx+b43*p3.dx);
-//     ytemp = p1.y+h*(b41*p1.dy+b42*p2.dy+b43*p3.dy);
-
-//     // Fourth
-//     var p4 = fn(xtemp,ytemp);
-//     xtemp = h*(b51*p1.dx + b52*p2.dx + b53*p3.dx + b54*p4.dx);
-//     ytemp = h*(b51*p1.dy + b52*p2.dy + b53*p3.dy + b54*p4.dy);
-
-//     //fifth
-//     p5 = fn(xtemp,ytemp);
-
-// ytemp[i]=y[i]+h*(b41*dydx[i]+b42*ak2[i]+b43*ak3[i]);
-// (*derivs)(x+a4*h,ytemp,ak4); Fourth step.
-// for (i=1;i<=n;i++)
-// ytemp[i]=y[i]+h*(b51*dydx[i]+b52*ak2[i]+b53*ak3[i]+b54*ak4[i]);
-// (*derivs)(x+a5*h,ytemp,ak5); Fifth step.
-// for (i=1;i<=n;i++)
-// ytemp[i]=y[i]+h*(b61*dydx[i]+b62*ak2[i]+b63*ak3[i]+b64*ak4[i]+b65*ak5[i]);
-// (*derivs)(x+a6*h,ytemp,ak6); Sixth step.
-// for (i=1;i<=n;i++) Accumulate increments with proper weights.
-// yout[i]=y[i]+h*(c1*dydx[i]+c3*ak3[i]+c4*ak4[i]+c6*ak6[i]);
-// for (i=1;i<=n;i++)
-// yerr[i]=h*(dc1*dydx[i]+dc3*ak3[i]+dc4*ak4[i]+dc5*ak5[i]+dc6*ak6[i]);
-// Estimate error as difference between fourth and fifth order methods.
-//     xtemp =
-
-//   }
-
-// }
-
 Applet.prototype.TotalEnergy = function () {
   var tot = 0;
   for (var i = 1; i < this.charges.length; i++) {
@@ -896,7 +758,6 @@ Applet.prototype.TotalEnergy = function () {
       var r2 = dx * dx + dy * dy;
       var r = Math.sqrt(r2);
       tot += (2 * ci.q * 2 * cj.q) / r; // using 3d pointlike potential
-      // tot += 2*ci.q*2*cj.q*Math.log(1/r); // using line charges
     }
   }
   return tot;
@@ -971,13 +832,6 @@ Applet.prototype.DrawFieldLines = function () {
     var line = this.fieldLines[i];
     //console.log("Drawing line ",i);
     this.ctx.strokeStyle = "#3F3F46";
-    // var c = 'rgb('+ (10*i).toFixed()%255 + ',' + (i*5).toFixed()%255 + ','+ (50-5*i).toFixed()%255 + ')';
-    // this.ctx.strokeStyle =  c;
-    // console.log(c);
-
-    // this.ctx.strokeStyle = 'blue';
-    // if(line.startCharge && line.startCharge.q >0) this.ctx.strokeStyle = 'red';
-    // if(line.start=="outside") this.ctx.strokeStyle = 'green';
     this.ctx.beginPath();
     this.ctx.lineJoin = "round";
     this.ctx.moveTo(line.start_x, line.start_y);
@@ -1018,14 +872,6 @@ Applet.prototype.DrawFieldLines = function () {
     // this.ctx.lineTo(0,ly);
     this.ctx.stroke();
     this.ctx.restore();
-
-    // Make dots.
-    // for(var j=0;j<line.points.length;j++) {
-    //   this.ctx.beginPath();
-    //   var p = line.points[j];
-    //   this.ctx.arc(p.x,p.y,0.01,0,Math.PI*2,true);
-    //   this.ctx.fill();
-    // }
   }
   console.timeEnd("Drawing lines");
 };
@@ -1048,14 +894,6 @@ Applet.prototype.DrawEquipotentialLines = function () {
 
     this.ctx.strokeStyle = "#52525B";
     this.ctx.lineWidth = 0.01;
-
-    // Make dots.
-    // for(var j=0;j<line.points.length;j++) {
-    //   this.ctx.beginPath();
-    //   var p = line.points[j];
-    //   this.ctx.arc(p.x,p.y,0.01,0,Math.PI*2,true);
-    //   this.ctx.stroke();
-    // }
   }
   console.timeEnd("Drawing potential lines");
 };
@@ -1071,21 +909,10 @@ Applet.prototype.DrawCharges = function () {
     var x = charge.x;
     var y = charge.y;
     var r = charge.r;
-    //console.log(charge.x,charge.y,charge.r,0,Math.PI*2,true);
     this.ctx.beginPath();
     this.ctx.arc(x, y, r, 0, Math.PI * 2, true);
     this.ctx.fill();
     this.ctx.stroke();
-
-    // Draw attempted node positions, for debugging
-    // for(var j=0;j<charge.nodes.length;j++) {
-    //   var t= charge.nodes[j];
-    //   x = charge.x + r*Math.cos(t);
-    //   y = charge.y + r*Math.sin(t);
-    //   this.ctx.beginPath();
-    //   this.ctx.arc(x,y,r/5,0,Math.PI*2,true);
-    //   this.ctx.stroke();
-    // }
 
     this.ctx.save();
     this.ctx.translate(charge.x, charge.y);
@@ -1117,11 +944,9 @@ function getAbsolutePosition(element) {
 }
 
 Applet.prototype.GetEventXY = function (ev) {
-  // Convert mouse click coordinates to the mathematical plane.
   var offset = getAbsolutePosition(this.canvas);
   var x = ev.pageX;
   var y = ev.pageY;
-  //$('#debug').html("DoMouse "+ ev.type + " " + ev.originalEvent.touches.length + " " + x +  " " + y);
 
   if (
     ev.type == "touchstart" ||
@@ -1129,7 +954,6 @@ Applet.prototype.GetEventXY = function (ev) {
     ev.type == "touchend"
   ) {
     ev.preventDefault();
-    //$('#debug').html("DoMouse "+ ev.type + " " + ev.originalEvent.touches.length + " " + x +  " " + y);
     x = ev.originalEvent.touches[0].pageX;
     y = ev.originalEvent.touches[0].pageY;
   }
@@ -1257,7 +1081,4 @@ Applet.prototype.PrintHQ = function () {
   // Restore defaults.
   this.canvas = saveCanvas;
   this.ctx = saveCtx;
-
-  // nuke buffer.
-  // document.removeChild(canvas); // Doesn't work. Is this thing a memory leak? I don't think so - I htink the canvas vanishes when it goes out of scope.
 };

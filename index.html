@@ -5,10 +5,7 @@
   xml:lang="ru"
 >
   <head>
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="cache-control" content="no-cache" />
-
-    <title>Электронное поле</title>
+    <title>Проект по физике</title>
 
     <link
       rel="stylesheet"
@@ -18,8 +15,12 @@
       rel="stylesheet"
       href="https://unpkg.com/@material-tailwind/html@latest/styles/material-tailwind.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.css"
+    />
     <link rel="stylesheet" href="index.css" />
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -178,13 +179,17 @@
                     <div
                       class="bg-gray-50 hover:bg-gray-100 p-4 cursor-pointer rounded-md border border-gray-300 transition-colors duration-300"
                     >
-                      <div class="col-span-1">
+                      <div class="col-span-1 w-128">
                         Количество вектор-линий:
                         <span id="lines_per_unit_charge">10</span><br />
-                        <div
+                        <!-- <div
                           id="lines_slider"
                           class="pointer-events-auto rounded-lg overflow-hidden appearance-none bg-gray-400 h-3 w-128"
-                        ></div>
+                        ></div> -->
+                        <input
+                          class="pointer-events-auto rounded-lg overflow-hidden appearance-none bg-gray-400 h-3 w-[80%]"
+                          id="lines_slider"
+                        />
                       </div>
                       <div class="col-span-1 py-2">
                         Метод вычислений:
@@ -353,16 +358,17 @@
       <h2>О линиях электрического поля:</h2>
       <p>
         Линии электрического поля - один из способов представления
-        электрического поля. Это поле является векторным, поэтому каждая точка
-        в пространстве имеет как <b>величину</b>, так и <b>направление</b>.
-        Чтобы понять направление поля,  можно посмотреть на направление линий поля
+        электрического поля. Это поле является векторным, поэтому каждая точка в
+        пространстве имеет как <b>величину</b>, так и <b>направление</b>. Чтобы
+        понять направление поля, можно посмотреть на направление линий поля
         неподалеку от этой точки. Чтобы понять величину поля, посмотрите,
         сколько линий поля проходит через этот регион.
       </p>
       <p>
-        Это приложение не показывает точное количество линий, так как оно бесконечно, но вы сможете получить представление о
-        процессе взаимодействия электронов и протонов. Попробуйте немного переместить заряды, чтобы увидеть, как
-        движутся линии поля.
+        Это приложение не показывает точное количество линий, так как оно
+        бесконечно, но вы сможете получить представление о процессе
+        взаимодействия электронов и протонов. Попробуйте немного переместить
+        заряды, чтобы увидеть, как движутся линии поля.
       </p>
       <br />
       <h2>Для преподавателей:</h2>
@@ -404,8 +410,8 @@
           <span style="font-family: courier"
             >index.html?q1=[заряд1],[x1],[y1]&q2=[заряд2],[x2],[y2]&....</span
           ><br />
-          где заряд1 - это размер первого заряда, x1 и y1 - координаты. (0,0)
-          - это центр экрана.
+          где заряд1 - это размер первого заряда, x1 и y1 - координаты. (0,0) -
+          это центр экрана.
         </li>
         <li>
           Добавьте "&lines=10", чтобы установить количество линий на единицу
