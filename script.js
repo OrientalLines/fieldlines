@@ -168,56 +168,6 @@ function Applet(element, options) {
   this.FindFieldLines();
   this.Draw();
 
-  // var self = this;
-  // $(window).bind("resize", function (ev) {
-  //   return self.Resize(ev);
-  // });
-
-  // $(window).bind("mousemove", function (ev) {
-  //   return self.DoMouse(ev);
-  // });
-  // $(this.element).bind("mousedown", function (ev) {
-  //   return self.DoMouse(ev);
-  // });
-  // $(window).bind("mouseup", function (ev) {
-  //   return self.DoMouse(ev);
-  // });
-  // $(this.element).bind("mouseout", function (ev) {
-  //   return self.DoMouse(ev);
-  // });
-  // $(".addcharge").bind("mousedown", function (ev) {
-  //   return self.AddCharge(ev);
-  // });
-
-  // $(this.element).bind("touchstart", function (ev) {
-  //   return self.DoMouse(ev);
-  // });
-  // $(window).bind("touchmove", function (ev) {
-  //   return self.DoMouse(ev);
-  // });
-  // $(window).bind("touchend", function (ev) {
-  //   return self.DoMouse(ev);
-  // });
-  // $(".addcharge").bind("touchstart", function (ev) {
-  //   return self.AddCharge(ev);
-  // });
-
-  // $("#ctl-do-eqipotential").click(function () {
-  //   self.Draw();
-  // });
-  // $("#ctl-zoom-in").click(function () {
-  //   self.DoZoom(1);
-  // });
-  // $("#ctl-zoom-in").on(function () {
-  //   self.DoZoom(1);
-  // });
-  // $("#ctl-zoom-out").click(function () {
-  //   self.DoZoom(-1);
-  // });
-  // $("#estMode").on("change", function () {
-  //   self.estMode = $(this).val();
-  //   self.Draw();
-  // });
   const self = this;
 
   window.addEventListener("resize", (ev) => self.Resize(ev));
