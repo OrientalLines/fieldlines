@@ -225,9 +225,8 @@ Applet.prototype.Resize = function () {
   console.log("Applet::Resize()", this);
   var width = $(this.element).width();
   var height = $(this.element).height();
-  // this.canvas.width = this.width = width;
-  this.canvas.width = 640
-  this.canvas.height = 640
+  this.canvas.width = this.width = width;
+  this.canvas.height = this.height = height;
   this.Draw();
 };
 

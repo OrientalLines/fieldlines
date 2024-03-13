@@ -81,7 +81,7 @@
   </head>
 
   <body>
-    <div class="flex justify-center items-center" id="controls">
+    <div class="flex justify-center items-center z-999 absolute" id="controls">
       <div x-data="{ open: true }">
         <div x-show="open" class="fixed inset-0 z-50 overflow-hidden">
           <!-- <div
@@ -94,7 +94,7 @@
             x-transition:leave-end="opacity-0"
             class="absolute inset-0"
           ></div> -->
-          <section class="absolute inset-y-0 right-0 pl-10 max-w-full flex">
+          <section class="absolute inset-y-0 right-0 pl-10 max-w-full flex ">
             <div
               x-show="open"
               x-transition:enter="transition-transform ease-out duration-300"
@@ -105,7 +105,7 @@
               x-transition:leave-end="transform translate-x-full"
               class="w-screen max-w-md"
             >
-              <div class="h-full flex flex-col py-6 bg-white shadow-xl">
+              <div class="h-full flex flex-col py-6 bg-white shadow-xl ">
                 <div class="flex items-center justify-between px-4">
                   <h2 class="text-xl font-semibold text-black">
                     Панель управления
@@ -329,13 +329,13 @@
     </div>
 
     <div>
-      <div class="notpad" id="sim"></div>
+      <div class="notpad -z-1" id="sim"></div>
     </div>
-    
-    <!-- Help and info -->
-    <div id="debug"></div>
 
-    <div id="totalenergy"></div>
+    <!-- Help and info -->
+    <!-- <div id="debug"></div> -->
+
+    <!-- <div id="totalenergy"></div> -->
 
     <div id="PopupWindow">
       <h3>Линии электрического поля</h3>
