@@ -196,14 +196,11 @@ function Applet(element, options) {
 
   document
     .getElementById("ctl-do-eqipotential")
-    .addEventListener("click", () => self.Draw());
+    .addEventListener("onchange", () => self.Draw());
   document
     .getElementById("ctl-do-eqipotential")
-    .addEventListener("tap", () => self.Draw());
-  document
-    .getElementById("ctl-do-eqipotential")
-    .addEventListener("touchstart", () => self.Draw());
-
+    .addEventListener(".detectThisChange", () => self.Draw());
+  
   document
     .getElementById("ctl-zoom-in")
     .addEventListener("click", () => self.DoZoom(1));
