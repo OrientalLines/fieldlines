@@ -18,12 +18,10 @@ let lastPopupActivationTime = 0;
 const popupActivationInterval = 100; // 0.5 seconds in milliseconds
 
 document.getElementById("do-popup").addEventListener("click", function () {
-  debugger
   document.getElementById("PopupWindow").style.display = "block";
   return false;
 });
 document.getElementById("do-popup").addEventListener("tap", function () {
-  debugger
   document.getElementById("PopupWindow").style.display = "block";
   return false;
 });

@@ -34,7 +34,6 @@ function handleSetChange() {
     if ($('#ctl-do-eqipotential').is(':checked')) {
       $('#ctl-do-eqipotential').prop('checked', false);
     } else {
-      // debugger
       $('#ctl-do-eqipotential').prop('checked', true);
     }
     
@@ -228,10 +227,13 @@ function Applet(element, options) {
   // });
   document
     .getElementById("ctl-do-eqipotential")
-    .addEventListener("onchange", () => {handleSetChange(); self.Draw()});
+    .addEventListener("onchange", () => {self.Draw()});
   document
     .getElementById("ctl-do-eqipotential")
-    .addEventListener("change", () => {handleSetChange(); self.Draw()});
+    .addEventListener("click", () => {self.Draw()});
+  document
+    .getElementById("ctl-do-eqipotential")
+    .addEventListener("change", () => {self.Draw()});
   document
     .getElementById("ctl-do-eqipotential")
     .addEventListener("touchstart",() =>  {handleSetChange(); self.Draw()});
