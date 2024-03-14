@@ -14,12 +14,47 @@ if (window["loadFirebugConsole"]) {
   if (!window.console["error"]) window.console.error = function () {};
 }
 
-$(function () {
-  $("#do-popup").click(function () {
-    $("#PopupWindow").css("display", "block");
+let lastPopupActivationTime = 0;
+const popupActivationInterval = 100; // 0.5 seconds in milliseconds
+
+document.getElementById("do-popup").addEventListener("click", function () {
+  debugger
+  document.getElementById("PopupWindow").style.display = "block";
+  return false;
+});
+document.getElementById("do-popup").addEventListener("tap", function () {
+  debugger
+  document.getElementById("PopupWindow").style.display = "block";
+  return false;
+});
+
+
+window.addEventListener("click", function () {
+  document.getElementById("PopupWindow").style.display = "none";
+});
+window.addEventListener("tap", function () {
+  document.getElementById("PopupWindow").style.display = "none";
+});
+
+
+let lastTouchTime = 0;
+const touchInterval = 100;
+
+document.getElementById("do-popup").addEventListener("touchstart", function (event) {
+  const currentTime = Date.now();
+
+  if (currentTime - lastTouchTime >= touchInterval) {
+    document.getElementById("PopupWindow").style.display = "block";
+    lastTouchTime = currentTime;
     return false;
-  });
-  $(window).click(function () {
-    $("#PopupWindow").css("display", "none");
-  });
+  }
+});
+
+window.addEventListener("touchstart", function (event) {
+  const currentTime = Date.now();
+
+  if (currentTime - lastTouchTime >= touchInterval) {
+    document.getElementById("PopupWindow").style.display = "none";
+    lastTouchTime = currentTime;
+  }
 });
